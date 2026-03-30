@@ -1,0 +1,37 @@
+# k8s/manifests/grafana-deployment.yaml
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: grafana
+  namespace: waste-helper
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: grafana
+  template:
+    metadata:
+      labels:
+        app: grafana
+    spec:
+      containers:
+      - name: grafana
+        image: grafana/grafana:latest
+        ports:
+        - containerPort: 3000
+        env:
+        - name: GF_SECURITY_ADMIN_PASSWORD
+          value: "admin"
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: grafana
+  namespace: waste-helper
+spec:
+  selector:
+    app: grafana
+  ports:
+  - port: 3000
