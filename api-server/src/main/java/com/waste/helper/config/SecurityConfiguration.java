@@ -21,9 +21,11 @@ import tech.jhipster.config.JHipsterProperties;
 public class SecurityConfiguration {
 
     private final JHipsterProperties jHipsterProperties;
+    private final RateLimitFilter rateLimitFilter;
 
-    public SecurityConfiguration(JHipsterProperties jHipsterProperties) {
+    public SecurityConfiguration(JHipsterProperties jHipsterProperties, RateLimitFilter rateLimitFilter) {
         this.jHipsterProperties = jHipsterProperties;
+        this.rateLimitFilter = rateLimitFilter;
     }
 
     @Bean
@@ -36,6 +38,7 @@ public class SecurityConfiguration {
         http
             .cors(withDefaults())
             .csrf(csrf -> csrf.disable())
+            .addFilterBefore(rateLimitFilter, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter.class)
             .authorizeHttpRequests(authz ->
                 // prettier-ignore
                 authz

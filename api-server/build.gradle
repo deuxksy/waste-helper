@@ -32,6 +32,22 @@ repositories {
 
 apply from: "gradle/spring-boot.gradle"
 apply from: "gradle/liquibase.gradle"
+
+// Ensure compileJava depends on generateProto
+tasks.named('compileJava') {
+    dependsOn tasks.named('generateProto')
+}
+
+// Add proto generated sources to compileJava classpath
+sourceSets {
+    main {
+        java {
+            srcDirs 'build/generated/source/proto/main/java'
+            srcDirs 'build/generated/source/proto/main/grpc'
+        }
+    }
+}
+
 // jhipster-needle-gradle-apply-from - JHipster will add additional gradle scripts to be applied here
 
 protobuf {
@@ -44,8 +60,21 @@ protobuf {
         }
     }
     generateProtoTasks {
-        all()*.plugins {
-            grpc {}
+        all().forEach { task ->
+            task.builtins {
+                java {}
+            }
+            task.plugins {
+                grpc {}
+            }
+        }
+    }
+}
+
+sourceSets {
+    main {
+        proto {
+            srcDir 'src/main/resources/proto'
         }
     }
 }
