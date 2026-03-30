@@ -1,0 +1,107 @@
+/**
+ * Waste Helper Backend — Domain Model JDL
+ * 9 Entities + 1 Enum
+ */
+
+// ── Enum ──────────────────────────────────────────────────────────
+
+enum Source {
+    PUBLIC_API,
+    LLM_GENERATED,
+    LLM_SUPPLEMENTED
+}
+
+// ── Entities ──────────────────────────────────────────────────────
+
+entity WasteClassification {
+    detectedClass String required,
+    confidence Float required min(0),
+    imageUrl String,
+    detailResult TextBlob,
+    classifiedAt Instant required
+}
+
+entity Region {
+    sido String,
+    sigungu String,
+    emdName String,
+    emdCode String unique
+}
+
+entity DisposalGuide {
+    wasteType String required,
+    disposalMethod TextBlob required,
+    source Source
+}
+
+entity SearchHistory {
+    query String,
+    resultSummary TextBlob,
+    classifiedAt Instant required
+}
+
+entity FavoriteRegion {
+    // Join entity — no additional fields
+}
+
+entity NotificationSetting {
+    enabled Boolean,
+    fcmToken String
+}
+
+entity WasteImage {
+    originalUrl String,
+    thumbnailUrl String
+}
+
+entity Feedback {
+    isAccurate Boolean,
+    correctedClass String,
+    comment String
+}
+
+// ── Relationships ─────────────────────────────────────────────────
+
+// WasteClassification → User (built-in)
+relationship ManyToOne {
+    WasteClassification{user(login)} to User{wasteClassifications} with builtInEntity
+}
+
+// Region ↔ DisposalGuide
+relationship OneToMany {
+    Region{disposalGuides} to DisposalGuide{region}
+}
+
+// SearchHistory → User (built-in)
+relationship ManyToOne {
+    SearchHistory{user(login)} to User{searchHistories} with builtInEntity
+}
+
+// FavoriteRegion → User (built-in), Region
+relationship ManyToOne {
+    FavoriteRegion{user(login)} to User{favoriteRegions} with builtInEntity,
+    FavoriteRegion{region(emdName)} to Region{favoriteRegions}
+}
+
+// NotificationSetting → User (built-in)
+relationship ManyToOne {
+    NotificationSetting{user(login)} to User{notificationSettings} with builtInEntity
+}
+
+// WasteImage → WasteClassification
+relationship ManyToOne {
+    WasteImage{wasteClassification} to WasteClassification{wasteImages}
+}
+
+// Feedback → User (built-in), WasteClassification
+relationship ManyToOne {
+    Feedback{user(login)} to User{feedbacks} with builtInEntity,
+    Feedback{wasteClassification} to WasteClassification{feedbacks}
+}
+
+// ── Options ───────────────────────────────────────────────────────
+
+dto * with mapstruct
+service * with serviceImpl
+paginate WasteClassification, Region, DisposalGuide, SearchHistory, Feedback with pagination
+paginate WasteImage, FavoriteRegion, NotificationSetting with infinite-scroll

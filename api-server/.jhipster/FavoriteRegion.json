@@ -1,0 +1,31 @@
+{
+  "annotations": {
+    "changelogDate": "20260330174713"
+  },
+  "applications": ["*"],
+  "dto": "mapstruct",
+  "fields": [],
+  "name": "FavoriteRegion",
+  "pagination": "infinite-scroll",
+  "relationships": [
+    {
+      "otherEntityField": "login",
+      "otherEntityName": "user",
+      "otherEntityRelationshipName": "favoriteRegions",
+      "relationshipName": "user",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one",
+      "relationshipWithBuiltInEntity": true
+    },
+    {
+      "otherEntityField": "emdName",
+      "otherEntityName": "region",
+      "otherEntityRelationshipName": "favoriteRegions",
+      "relationshipName": "region",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

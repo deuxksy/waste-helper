@@ -12,7 +12,22 @@
     <property name="timeType" value="time(6)" dbms="postgresql"/>
 
     <include file="config/liquibase/changelog/00000000000000_initial_schema.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20260330174709_added_entity_WasteClassification.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20260330174710_added_entity_Region.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20260330174711_added_entity_DisposalGuide.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20260330174712_added_entity_SearchHistory.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20260330174713_added_entity_FavoriteRegion.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20260330174714_added_entity_NotificationSetting.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20260330174715_added_entity_WasteImage.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20260330174716_added_entity_Feedback.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
+    <include file="config/liquibase/changelog/20260330174709_added_entity_constraints_WasteClassification.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20260330174711_added_entity_constraints_DisposalGuide.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20260330174712_added_entity_constraints_SearchHistory.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20260330174713_added_entity_constraints_FavoriteRegion.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20260330174714_added_entity_constraints_NotificationSetting.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20260330174715_added_entity_constraints_WasteImage.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20260330174716_added_entity_constraints_Feedback.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
     <!-- jhipster-needle-liquibase-add-incremental-changelog - JHipster will add incremental liquibase changelogs here -->
 </databaseChangeLog>

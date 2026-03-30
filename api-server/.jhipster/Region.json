@@ -1,0 +1,46 @@
+{
+  "annotations": {
+    "changelogDate": "20260330174710"
+  },
+  "applications": ["*"],
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "sido",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "sigungu",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "emdName",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "emdCode",
+      "fieldType": "String",
+      "fieldValidateRules": ["unique"]
+    }
+  ],
+  "name": "Region",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityName": "disposalGuide",
+      "otherEntityRelationshipName": "region",
+      "relationshipName": "disposalGuides",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityName": "favoriteRegion",
+      "otherEntityRelationshipName": "region",
+      "relationshipName": "favoriteRegions",
+      "relationshipSide": "right",
+      "relationshipType": "one-to-many"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

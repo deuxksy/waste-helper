@@ -1,0 +1,37 @@
+{
+  "annotations": {
+    "changelogDate": "20260330174712"
+  },
+  "applications": ["*"],
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "query",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "resultSummary",
+      "fieldType": "TextBlob"
+    },
+    {
+      "fieldName": "classifiedAt",
+      "fieldType": "Instant",
+      "fieldValidateRules": ["required"]
+    }
+  ],
+  "name": "SearchHistory",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityField": "login",
+      "otherEntityName": "user",
+      "otherEntityRelationshipName": "searchHistories",
+      "relationshipName": "user",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one",
+      "relationshipWithBuiltInEntity": true
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}
