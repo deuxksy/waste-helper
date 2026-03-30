@@ -101,6 +101,7 @@ dependencies {
     implementation libs.mapstruct
     implementation libs.redisson
     implementation libs.springdoc.openapi.starter.webmvc.api
+    implementation "org.springframework.boot:spring-boot-starter-data-redis"
     implementation "org.springframework.boot:spring-boot-h2console"
     implementation "org.springframework.boot:spring-boot-jackson2"
     implementation "org.springframework.boot:spring-boot-starter"

@@ -1,6 +1,8 @@
 package com.waste.helper.grpc;
 
-import com.waste.helper.grpc.vlm.*;
+import com.waste.helper.grpc.vlm.VLMInferenceGrpc;
+import com.waste.helper.grpc.vlm.AnalyzeRequest;
+import com.waste.helper.grpc.vlm.AnalyzeResponse;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import org.springframework.beans.factory.annotation.Value;
