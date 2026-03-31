@@ -1,0 +1,30 @@
+{
+  "annotations": {
+    "changelogDate": "20260330174715"
+  },
+  "applications": ["*"],
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "originalUrl",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "thumbnailUrl",
+      "fieldType": "String"
+    }
+  ],
+  "name": "WasteImage",
+  "pagination": "infinite-scroll",
+  "relationships": [
+    {
+      "otherEntityName": "wasteClassification",
+      "otherEntityRelationshipName": "wasteImages",
+      "relationshipName": "wasteClassification",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

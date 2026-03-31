@@ -1,0 +1,38 @@
+{
+  "annotations": {
+    "changelogDate": "20260330174711"
+  },
+  "applications": ["*"],
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "wasteType",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "disposalMethod",
+      "fieldType": "TextBlob",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "source",
+      "fieldType": "Source",
+      "fieldTypeDocumentation": "Waste Helper Backend — Domain Model JDL\\n9 Entities + 1 Enum",
+      "fieldValues": "PUBLIC_API,LLM_GENERATED,LLM_SUPPLEMENTED"
+    }
+  ],
+  "name": "DisposalGuide",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityName": "region",
+      "otherEntityRelationshipName": "disposalGuides",
+      "relationshipName": "region",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}
