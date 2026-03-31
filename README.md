@@ -1,6 +1,6 @@
-# 내 손안의 AI 폐기물 처리 도우미 - Backend
+# 내 손안의 AI 폐기물 처리 도우미
 
-> **sort-mate** — React Native 앱을 위한 백엔드 시스템
+> **sort-mate** — AI 기반 폐기물 분류 도우미
 
 ## 구조
 
