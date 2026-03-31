@@ -5,7 +5,7 @@
 ## 구조
 
 ```
-kl/
+sort-mate/
 ├── api-server/          # JHipster API 서버 (Spring Boot 3.x, Gradle)
 ├── vlm-service/         # VLM 마이크로서비스 (FastAPI + gRPC, Qwen3-VL-4B)
 ├── k8s/                 # Kubernetes 매니페스트 & Helm Chart
