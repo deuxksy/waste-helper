@@ -1,11 +1,11 @@
 # 내 손안의 AI 폐기물 처리 도우미
 
-> **sort-mate** — AI 기반 폐기물 분류 도우미
+> **waste-helper** — AI 기반 폐기물 분류 도우미
 
 ## 구조
 
 ```
-sort-mate/
+waste-helper/
 ├── api-server/          # JHipster API 서버 (Spring Boot 3.x, Gradle)
 ├── vlm-service/         # VLM 마이크로서비스 (FastAPI + gRPC, Qwen3-VL-4B)
 ├── k8s/                 # Kubernetes 매니페스트 & Helm Chart

@@ -1,4 +1,4 @@
-# sort-mate 시스템 아키텍처
+# waste-helper 시스템 아키텍처
 
 > Phase 1 기준 — 전체 시스템 아키텍처 다이어그램
 
@@ -10,7 +10,7 @@
 graph TB
     subgraph Client["📱 Client (React Native)"]
         Camera["📷 Camera<br/>YOLO TFLite 온디바이스"]
-        App[" sort-mate App<br/>Zustand + React Navigation"]
+        App[" waste-helper App<br/>Zustand + React Navigation"]
     end
 
     subgraph K8s["☸️ Proxmox Kubernetes Cluster"]
@@ -242,7 +242,7 @@ graph TB
 
 ```mermaid
 graph LR
-    Dev["Developer<br/>git push"] --> GitHub["GitHub Repo<br/>deuxksy/sort-mate"]
+    Dev["Developer<br/>git push"] --> GitHub["GitHub Repo<br/>deuxksy/waste-helper"]
 
     subgraph ArgoCD["ArgoCD"]
         Sync["Auto Sync"]
