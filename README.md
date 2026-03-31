@@ -47,4 +47,5 @@ docker run -p 50051:50051 vlm-service:latest
 
 ## 문서
 
+- [시스템 아키텍처](docs/architecture.md)
 - [Backend 설계 문서](docs/superpowers/specs/2026-03-30-waste-helper-backend-design.md)
