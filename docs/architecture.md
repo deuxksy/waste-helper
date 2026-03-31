@@ -187,7 +187,7 @@ flowchart TD
     Req["분류 결과 + 지역 코드"] --> PG{PostgreSQL<br/>공공데이터 조회}
 
     PG -->|"HIT"| Return1["PUBLIC_API<br/>공공데이터 그대로 반환"]
-    PG -->|"MISS"| Vec{Vector DB<br/>유사 검색 (threshold 0.85)}
+    PG -->|"MISS"| Vec{"Vector DB<br/>유사 검색 threshold 0.85"}
 
     Vec -->|"HIT"| Return2["VECTOR_CACHE<br/>캐시된 LLM 응답 반환"]
     Vec -->|"MISS"| VLM["VLM 실시간 추론<br/>Qwen3-VL-4B"]
@@ -244,7 +244,7 @@ graph TB
 graph LR
     Dev["Developer<br/>git push"] --> GitHub["GitHub Repo<br/>deuxksy/sort-mate"]
 
-    subchart ArgoCD["ArgoCD"]
+    subgraph ArgoCD["ArgoCD"]
         Sync["Auto Sync"]
         Diff["Drift Detection"]
     end
@@ -252,7 +252,7 @@ graph LR
     GitHub -->|"Webhook / Poll"| Sync
     Sync -->|"Apply Manifests"| K8s["K8s Cluster"]
 
-    subchart Repo["/k8s Directory"]
+    subgraph Repo["/k8s Directory"]
         Manifests["/manifests/<br/>K8s raw YAML"]
         Helm["/helm/<br/>Helm Chart"]
         App["/argocd/<br/>Application CRD"]
