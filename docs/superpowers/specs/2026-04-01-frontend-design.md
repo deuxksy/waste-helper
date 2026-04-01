@@ -6,7 +6,7 @@
 
 ## 1. 개요
 
-### 목표
+аксим### 목표
 
 폐기물 촬영 → 온디바이스 YOLO 1차 분류 → API Server VLM 상세 분석 → 배출 방법 안내까지 한 화면 flow로 제공.
 
@@ -70,7 +70,7 @@ frontend/
 │
 ├── hooks/
 │   ├── useCamera.ts            # 카메라 권한 + 제어
-│   ├── useClassify.ts          # 분류 상태관리 (YOLO → API)
+│   ├── useClassify.ts            # 분류 상태관리 (YOLO → API)
 │   └── usePermission.ts        # 권한 체크
 │
 ├── constants/
@@ -94,10 +94,7 @@ frontend/
 │       └── ResultCard.test.tsx
 │
 ├── __fixtures__/
-│   └── test-images/            # YOLO 테스트용
-│       ├── pet_bottle.jpg
-│       ├── can.jpg
-│       └── food_waste.jpg
+│   └── test-images/            # YOLO 테스트용 (.gitignore 등록 권장)
 │
 ├── app.json
 ├── tsconfig.json
@@ -161,80 +158,105 @@ frontend/
 
 ## 4. API 연동
 
-### Request Flow
+> Backend API 스펙 기준: `ClassificationResource.java`, `ClassifyDetailResponse.java`
+
+### Request
 
 ```
-Camera 캡영
-    ↓
-[온디바이스] YOLO TFLite 추론
-    ├─ confidence ≥ 70% → 클래스명 표시
-    └─ confidence < 70% → "인식 불가" 안내
-    ↓
-[API Server] POST /api/v1/classify/detail
-    ↓ multipart/form-data
-    {
-      image: JPEG (압축, max 1MB)
-      yoloClass: "플라스틱" | null
-      yoloConfidence: 0.95
-      regionCode: "11000"
-    }
-    ↓
-[Response] 200 OK
-    {
-      "category": "RECYCLABLE",
-      "wasteType": "PET 플라스틱 병",
-      "confidence": 0.92,
-      "disposalMethod": {
-        "steps": ["...", "...", "..."],
-        "warnings": ["뚜껑 별도 분리"],
-        "cost": null
-      },
-      "source": "VLM_REALTIME"
-    }
+POST /api/v1/classify/detail  Content-Type: multipart/form-data
+
+  image: JPEG (압축, max 1MB)            // MultipartFile (required)
+  detectedClass: "플라스틱"              // String (required, @NotBlank)
+  confidence: 0.95                      // Float (required, @NotNull, 0.0~1.0)
+  regionCode: "11000"                  // String (optional)
+```
+
+### Response
+
+```
+200 OK — ClassifyDetailResponse
+
+{
+  "detectedClass": "플라스틱",
+  "confirmedClass": "PET 플라스틱 병",
+  "confidence": 0.92,
+  "disposalMethod": {
+    "method": "분리수거",
+    "notes": ["내용물 비우기", "라벨 제거"],
+    "items": [
+      { "label": "본체", "action": "플라스틱 분리수거함" },
+      { "label": "뚜껑", "action": "일반 쓰레기" }
+    ]
+  },
+  "costInfo": {
+    "type": "FREE",
+    "amount": 0,
+    "currency": "KRW",
+    "collectionSchedule": "월/수/금 오전 6~9시",
+    "notes": "지자체별 상이"
+  },
+  "warnings": ["뚜껑 별도 분리"],
+  "regionSpecific": "서울시 기준",
+  "source": "VLM_REALTIME",
+  "cached": false
+}
 ```
 
 ### TypeScript Types
 
+> Backend Java Record와 1:11 매핑. 필드명/타입은 서버 스펙 기준.
+
 ```typescript
 // types/classify.ts
 
+// --- Request ---
+
 export interface ClassifyRequest {
   image: Blob;
-  yoloClass?: string;
-  yoloConfidence?: number;
-  regionCode?: string;
+  detectedClass: string;        // @NotBlank, YOLO 분류명
+  confidence: number;           // 0.0 ~ 1.0
+  regionCode?: string;          // optional
 }
 
-export interface ClassifyResponse {
-  category: WasteCategory;
-  wasteType: string;
+// --- Response ---
+
+export interface ClassifyDetailResponse {
+  detectedClass: string;
+  confirmedClass: string;
   confidence: number;
-  disposalMethod: DisposalMethod;
-  source: ResultSource;
-}
-
-export type WasteCategory =
-  | 'RECYCLABLE'
-  | 'FOOD_WASTE'
-  | 'GENERAL'
-  | 'HAZARDOUS'
-  | 'OVERSIZED';
-
-export type ResultSource =
-  | 'PUBLIC_API'
-  | 'VECTOR_CACHE'
-  | 'VLM_REALTIME';
-
-export interface DisposalMethod {
-  steps: string[];
+  disposalMethod: DisposalMethodResponse;
+  costInfo: CostInfoResponse;
   warnings: string[];
-  cost?: string;
+  regionSpecific: string;
+  source: string;               // "PUBLIC_API" | "VECTOR_CACHE" | "VLM_REALTIME"
+  cached: boolean;
 }
+
+export interface DisposalMethodResponse {
+  method: string;               // "분리수거", "음식물 폐기물", "일반 쓰레기" 등
+  notes: string[];              // 배출 시 주의사항
+  items: DisposalItemResponse[]; // 부품별 배출 방법
+}
+
+export interface DisposalItemResponse {
+  label: string;                // "본체", "뚜껑", "라벨" 등
+  action: string;               // 해당 부품의 배출 방법
+}
+
+export interface CostInfoResponse {
+  type: string;                 // "FREE", "PAID", "SUBSCRIPTION" 등
+  amount: number;
+  currency: string;             // "KRW"
+  collectionSchedule: string;   // "월/수/금 오전 6~9시"
+  notes: string;
+}
+
+// --- YOLO (온디바이스) ---
 
 export interface YOLOResult {
   className: string;
   confidence: number;
-  boundingBox: [number, number, number, number];
+  boundingBox?: [number, number, number, number];
 }
 ```
 
@@ -245,9 +267,19 @@ export interface YOLOResult {
 | 기능 | Mobile | Web |
 |---|---|---|
 | 카메라 | expo-camera (Native) | WebRTC getUserMedia |
-| YOLO TFLite | tflite-react-native | 서버 API로 폴백 |
+| YOLO TFLite | tflite-react-native | 서버 API로 폴백 (이미지 전체 전송) |
 | 푸시 알림 (Phase 2) | expo-notifications | Web Push API |
 | 네비게이션 | Stack + Tab | 동일 (Expo Router Web) |
+
+### Web 폴백 전략
+
+Web 환경에서 TFLite를 사용할 수 없으믢 다음과 같이 폴백:
+
+```
+Web: camera(getUserMedia) → 이미지 캡처 → POST /api/v1/classify/detail
+  (detectedClass=null, confidence=0 으로 전체 분석을 서버에 의존)
+Mobile: camera → YOLO TFLite 1차 → API 서버 상세 분석
+```
 
 ---
 
@@ -255,26 +287,30 @@ export interface YOLOResult {
 
 | 시나리오 | 처리 |
 |---|---|
-| 네트워크 오류 | "오프라인 모드" 안내, YOLO 결과만 표시 |
+| 네트워크 오류 | "오프라인 모드" 안내, YOLO 결과만 표시 (Mobile only) |
 | API 타임아웃 (10s) | 재시도 1회 후 "서버 혼잡" 안내 |
-| YOLO 미인식 | "다시 촬영" 안내, VLM 직접 요청 |
-| 카메라 권한 거부 | 설정 이동 CTA |
-| TFLite 모델 로드 실패 | 서버 전용 모드로 폴백 |
+| YOLO 미인식 (confidence < 70%) | "다시 촬영" 안내, VLM 직접 요청 (detectedClass=null) confidence=0) |
+| 카메라 권한 거부 | 설정 이동 CTA (`Linking.openSettings()` on Expo) |
+| TFLite 모델 로드 실패 | 서버 전용 모드로 폴백 (detectedClass=null) confidence=0 전송) |
+| API 400/500 | "일시 오류" 안내, 재시도 없함 |
 
 ---
 
 ## 7. 핵심 Dependencies
 
-| Package | Version | 용도 |
-|---|---|---|
-| expo | ~53 | SDK core |
-| expo-router | ~4 | File-based routing |
-| expo-camera | ~16 | 카메라 제어 |
-| nativewind | ~4 | Tailwind for RN |
-| tailwindcss | ~3 | NativeWind peer |
-| tflite-react-native | - | 온디바이스 YOLO 추론 |
-| expo-image-manipulator | ~13 | 이미지 리사이즈/압축 |
-| expo-constants | ~17 | 환경변수 관리 |
+| Package | Version | 용도 | 비고 |
+|---|---|---|---|
+| expo | ~53 | SDK core | - |
+| expo-router | ~4 | File-based routing | - |
+| expo-camera | ~16 | 카메라 제어 | - |
+| nativewind | ~4 | Tailwind for RN | Expo 53 호환성 검증 필요 |
+| tailwindcss | ~3 | NativeWind peer | - |
+| tflite-react-native | latest | 온디바이스 YOLO 추론 | Expo New Arch 호환성 검증 필요, |
+| expo-image-manipulator | ~13 | 이미지 리사이즈/압축 | - |
+| expo-constants | ~17 | 환경변수 관리 | - |
+
+> **호환성 검증 필수**: `tflite-react-native`과 `NativeWind v4`의 Expo SDK 53 / New Architecture 지원 여부는
+> 초기 설정 시 호환성 테스트가 필요. 미지원 시 대안 패키지 검토 필요.
 
 ---
 
@@ -285,5 +321,6 @@ export interface YOLOResult {
 | Unit | Vitest + React Testing Library | hooks, services, utils |
 | Component | Vitest + RNTL | UI 컴포넌트 |
 | Integration | MSW (API mocking) | API client + flow |
-| E2E | Detox (mobile) / Playwright (web) | 전체 화면 flow |
-| YOLO | 테스트 이미지 셋 (50장) | 분류 정확도 ≥ 85% |
+| YOLO | 테스트 이미지 셋 (50장, CI 외부 관리) | 분류 정확도 ≥ 85% |
+
+> Phase 1에서는 Unit/Component 테스트에 집중. E2E(Detox/Playwright)은 Phase 2+에서 도입.
