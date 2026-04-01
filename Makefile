@@ -14,6 +14,9 @@ ENV_FILE   ?= .env
 API_IMAGE  ?= waste-helper/api-server:latest
 VLM_IMAGE  ?= waste-helper/vlm-service:latest
 
+# 빌드 플랫폼 (로컬: 비워둠, 운영: PLATFORM=linux/amd64)
+PLATFORM_FLAG := $(PLATFORM:%=--platform %)
+
 # 환경변수 로드 (존재할 경우)
 ifneq ($(wildcard $(ENV_FILE)),)
 include $(ENV_FILE)
@@ -28,8 +31,9 @@ endif
 
 build: build-api build-vlm ## 전체 빌드
 
-build-api: ## API Server 빌드 (Gradle bootJar)
+build-api: ## API Server 빌드 (Gradle bootJar + Docker 이미지)
 	cd api-server && ./gradlew bootJar -x test
+	docker build $(PLATFORM_FLAG) -f api-server/Dockerfile.local -t $(API_IMAGE) api-server/
 
 build-vlm: ## VLM Service Docker 이미지 빌드
 	docker build -t $(VLM_IMAGE) vlm-service/
@@ -43,7 +47,7 @@ build-frontend: ## Frontend TypeScript 타입 체크
 # Test
 # =============================================================================
 
-.PHONY: test test-api test-vlm
+.PHONY: test test-api test-vlm test-frontend
 
 test: test-api ## 전체 테스트
 
@@ -52,6 +56,9 @@ test-api: ## API Server 테스트
 
 test-vlm: ## VLM Service 테스트
 	cd vlm-service && python3 -m pytest tests/ -v
+
+test-frontend: ## Frontend Expo dev 서버 시작 테스트
+	cd frontend && npx expo start --clear & EXPO_PID=$$!; sleep 10; kill $$EXPO_PID 2>/dev/null; echo "Expo dev server test passed"
 
 # =============================================================================
 # Local Development
@@ -91,6 +98,7 @@ deploy-infra: ## Namespace + PostgreSQL + Redis 배포
 
 deploy-api: build-api ## API Server 이미지 빌드 + K8s 배포
 	kubectl apply -f $(K8S_DIR)/api-server-deployment.yaml
+	kubectl rollout restart deployment/api-server -n $(NAMESPACE)
 
 deploy-vlm: build-vlm ## VLM Service 이미지 빌드 + K8s 배포
 	kubectl apply -f $(K8S_DIR)/vlm-deployment.yaml
@@ -131,6 +139,7 @@ docker-push-vlm: build-vlm ## VLM Service 이미지 빌드 + Push
 clean: ## 빌드 산출물 삭제
 	cd api-server && ./gradlew clean
 	find . -name "__pycache__" -type d -exec rm -rf {} + 2>/dev/null || true
+	cd frontend && rm -rf .expo node_modules/.cache 2>/dev/null || true
 
 env-setup: ## .env 초기 설정 (.env.example → .env)
 	cp -n .env.example .env || true

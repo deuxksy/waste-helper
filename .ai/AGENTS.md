@@ -17,6 +17,10 @@
 6. AI: Qwen VL
 7. 운영: OpenClaw
    - K8S 분석 HolmesGPT
-   - K8S 구축: kubectl-ai
    - K8S 탐색: k8sgpt
    - K8S 모니터링: k9s
+
+## make
+
+build, deploy, test 항상 make 를 이용한다.
+n
