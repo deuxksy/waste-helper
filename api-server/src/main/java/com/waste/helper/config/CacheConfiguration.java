@@ -15,9 +15,13 @@ import org.springframework.boot.cache.autoconfigure.JCacheManagerCustomizer;
 import org.springframework.boot.hibernate.autoconfigure.HibernatePropertiesCustomizer;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
+import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
+import org.springframework.data.redis.serializer.StringRedisSerializer;
 import tech.jhipster.config.JHipsterProperties;
 
 @Configuration
@@ -103,5 +107,33 @@ public class CacheConfiguration {
         } else {
             cm.createCache(cacheName, jcacheConfiguration);
         }
+    }
+
+    @Bean
+    public RedisConnectionFactory redisConnectionFactory(JHipsterProperties jHipsterProperties) {
+        URI redisUri = URI.create(jHipsterProperties.getCache().getRedis().getServer()[0]);
+        RedisStandaloneConfiguration config = new RedisStandaloneConfiguration();
+        config.setHostName(redisUri.getHost());
+        config.setPort(redisUri.getPort());
+
+        if (redisUri.getUserInfo() != null) {
+            String password = redisUri.getUserInfo().substring(redisUri.getUserInfo().indexOf(':') + 1);
+            config.setPassword(password);
+        }
+
+        return new LettuceConnectionFactory(config);
+    }
+
+    @Bean
+    public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory connectionFactory) {
+        RedisTemplate<String, Object> template = new RedisTemplate<>();
+        template.setConnectionFactory(connectionFactory);
+        template.setKeySerializer(new StringRedisSerializer());
+        template.setValueSerializer(new GenericJackson2JsonRedisSerializer());
+        template.setHashKeySerializer(new StringRedisSerializer());
+        template.setHashValueSerializer(new GenericJackson2JsonRedisSerializer());
+        template.setEnableDefaultSerializer(false);
+        template.afterPropertiesSet();
+        return template;
     }
 }

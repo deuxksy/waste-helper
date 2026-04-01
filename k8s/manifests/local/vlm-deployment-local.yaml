@@ -1,0 +1,58 @@
+# 로컬 개발용 VLM Service — GPU 리소스 제거
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vlm-service
+  namespace: waste-helper
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: vlm-service
+  template:
+    metadata:
+      labels:
+        app: vlm-service
+    spec:
+      containers:
+      - name: vlm-service
+        image: vlm-service:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 50051
+          name: grpc
+        - containerPort: 8000
+          name: http
+        env:
+        - name: MODEL_NAME
+          value: "Qwen/Qwen3-VL-4B"
+        - name: VLLM_MAX_MODEL_LEN
+          value: "4096"
+        resources:
+          requests:
+            memory: "2Gi"
+            cpu: "500m"
+          limits:
+            memory: "4Gi"
+            cpu: "2"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 60
+          periodSeconds: 30
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: vlm-service
+  namespace: waste-helper
+spec:
+  selector:
+    app: vlm-service
+  ports:
+  - port: 50051
+    name: grpc
+  - port: 8000
+    name: http

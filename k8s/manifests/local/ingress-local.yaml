@@ -1,0 +1,30 @@
+# 로컬 개발용 Ingress — TLS/cert-manager 없이, OrbStack NGINX Ingress 사용
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: waste-helper-ingress
+  namespace: waste-helper
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: api.waste-helper.local
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: api-server
+            port:
+              number: 8080
+  - http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: api-server
+            port:
+              number: 8080

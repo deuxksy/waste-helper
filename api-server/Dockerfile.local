@@ -1,0 +1,18 @@
+# Simple Dockerfile for local development - uses pre-built JAR
+FROM eclipse-temurin:21-jre-alpine
+
+RUN apk add --no-cache bash
+
+WORKDIR /app
+
+# Copy pre-built JAR
+COPY build/libs/*.jar /app/app.jar
+
+# Copy entrypoint script
+COPY src/main/docker/jib/entrypoint.sh /app/entrypoint.sh
+RUN chmod +x /app/entrypoint.sh
+
+ENV JAVA_OPTS="-Xmx512m" JHIPSTER_SLEEP=0
+EXPOSE 8080
+
+ENTRYPOINT ["./entrypoint.sh"]

@@ -39,6 +39,10 @@ spring:
   liquibase:
     # Remove 'faker' if you do not want the sample data to be loaded automatically
     contexts: dev, faker
+    # Disable Liquibase telemetry/analytics for offline/K8s environments
+    parameters:
+      analytics.enabled: false
+      liquibase.hub.mode: none
   mail:
     host: localhost
     port: 25
