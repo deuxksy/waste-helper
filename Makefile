@@ -24,7 +24,7 @@ endif
 # Build
 # =============================================================================
 
-.PHONY: build build-api build-vlm build-all
+.PHONY: build build-api build-vlm build-all build-frontend run-frontend dev-frontend
 
 build: build-api build-vlm ## 전체 빌드
 
@@ -34,7 +34,22 @@ build-api: ## API Server 빌드 (Gradle bootJar)
 build-vlm: ## VLM Service Docker 이미지 빌드
 	docker build -t $(VLM_IMAGE) vlm-service/
 
-build-all: build ## 전체 빌드 (build alias)
+build-all: build build-frontend ## 전체 빌드 (Backend + Frontend)
+
+build-frontend: ## Frontend TypeScript 타입 체크
+	cd frontend && npx tsc --noEmit
+
+# =============================================================================
+# Frontend
+# =============================================================================
+
+.PHONY: run-frontend dev-frontend
+
+run-frontend: ## Frontend Expo 개발 서버 실행
+	cd frontend && pnpm start
+
+dev-frontend: ## Frontend Expo 개발 서버 실행 (run-frontend alias)
+	cd frontend && pnpm start
 
 # =============================================================================
 # Test
