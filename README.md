@@ -1,5 +1,5 @@
 # 내 손안의 AI 폐기물 처리 도우미
-
+[![CI](https://github.com/deuxksy/waste-helper/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/deuxksy/waste-helper/actions/workflows/ci.yml)
 > **waste-helper** — AI 기반 폐기물 분류 도우미
 
 ## 아키텍처
