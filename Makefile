@@ -11,8 +11,9 @@ K8S_DIR    := k8s/manifests
 ENV_FILE   ?= .env
 
 # Docker 이미지 태그
-API_IMAGE  ?= waste-helper/api-server:latest
-VLM_IMAGE  ?= waste-helper/vlm-service:latest
+API_IMAGE      ?= waste-helper/api-server:latest
+VLM_IMAGE      ?= waste-helper/vlm-service:latest
+FRONTEND_IMAGE ?= waste-helper/frontend:latest
 
 # 빌드 플랫폼 (로컬: 비워둠, 운영: PLATFORM=linux/amd64)
 PLATFORM_FLAG := $(PLATFORM:%=--platform %)
@@ -27,7 +28,7 @@ endif
 # Build
 # =============================================================================
 
-.PHONY: build build-api build-vlm build-all build-frontend
+.PHONY: build build-api build-vlm build-all build-frontend build-frontend-docker
 
 build: build-api build-vlm ## 전체 빌드
 
@@ -38,10 +39,13 @@ build-api: ## API Server 빌드 (Gradle bootJar + Docker 이미지)
 build-vlm: ## VLM Service Docker 이미지 빌드
 	docker build -t $(VLM_IMAGE) vlm-service/
 
-build-all: build build-frontend ## 전체 빌드 (Backend + Frontend)
+build-all: build build-frontend-docker ## 전체 빌드 (Backend + Frontend Docker 이미지)
 
 build-frontend: ## Frontend TypeScript 타입 체크
 	cd frontend && npx tsc --noEmit
+
+build-frontend-docker: ## Frontend Docker 이미지 빌드 (Expo Web → Nginx)
+	docker build $(PLATFORM_FLAG) -t $(FRONTEND_IMAGE) frontend/
 
 # =============================================================================
 # Test
@@ -89,10 +93,10 @@ loc-frontend: ## Frontend Expo 개발 서버 실행
 # K8s Deploy
 # =============================================================================
 
-.PHONY: deploy deploy-infra deploy-api deploy-vlm deploy-monitoring \
+.PHONY: deploy deploy-infra deploy-api deploy-vlm deploy-frontend deploy-monitoring \
         deploy-all teardown
 
-deploy: deploy-infra deploy-api deploy-vlm ## 전체 배포
+deploy: deploy-infra deploy-api deploy-vlm deploy-frontend ## 전체 배포
 
 deploy-infra: ## Namespace + PostgreSQL + Redis 배포
 	kubectl apply -f $(K8S_DIR)/namespace.yaml
@@ -107,6 +111,10 @@ deploy-api: build-api ## API Server 이미지 빌드 + K8s 배포
 deploy-vlm: build-vlm ## VLM Service 이미지 빌드 + K8s 배포
 	kubectl apply -f $(K8S_DIR)/vlm-deployment.yaml
 	kubectl apply -f $(K8S_DIR)/vlm-hpa.yaml
+
+deploy-frontend: build-frontend-docker ## Frontend 이미지 빌드 + K8s 배포
+	kubectl apply -f $(K8S_DIR)/frontend-deployment.yaml
+	kubectl rollout restart deployment/frontend -n $(NAMESPACE)
 
 deploy-monitoring: ## Prometheus + Grafana 배포
 	kubectl apply -f $(K8S_DIR)/prometheus-config.yaml

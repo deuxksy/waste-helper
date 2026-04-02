@@ -33,6 +33,7 @@ class TechnicalStructureTest {
         .ignoreDependency(belongToAnyOf(WasteHelperApp.class), alwaysTrue())
         .ignoreDependency(alwaysTrue(), belongToAnyOf(
             com.waste.helper.config.Constants.class,
-            com.waste.helper.config.ApplicationProperties.class
+            com.waste.helper.config.ApplicationProperties.class,
+            com.waste.helper.config.RateLimitConfig.class
         ));
 }

@@ -10,9 +10,20 @@ spec:
   ingressClassName: nginx
   tls:
   - hosts:
+    - waste-helper.com
     - api.waste-helper.com
     secretName: waste-helper-tls
   rules:
+  - host: waste-helper.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: frontend
+            port:
+              number: 80
   - host: api.waste-helper.com
     http:
       paths:
