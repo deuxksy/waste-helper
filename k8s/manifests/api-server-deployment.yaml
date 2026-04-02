@@ -17,6 +17,7 @@ spec:
       containers:
       - name: api-server
         image: waste-helper/api-server:latest
+        imagePullPolicy: Never
         ports:
         - containerPort: 8080
         env:
