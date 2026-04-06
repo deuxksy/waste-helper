@@ -1,4 +1,25 @@
-import type { StorybookConfig } from "@storybook/react-webpack5";
+import type { StorybookConfig } from "@storybook/react-vite";
+import { mergeConfig, type Plugin } from "vite";
+import path from "path";
+
+// react-native → react-native-web 강제 해석 플러그인
+function reactNativeWebAlias(): Plugin {
+  const webRoot = path.dirname(
+    require.resolve("react-native-web/package.json")
+  );
+  return {
+    name: "react-native-web-alias",
+    enforce: "pre",
+    resolveId(source) {
+      if (
+        source === "react-native" ||
+        source.startsWith("react-native/")
+      ) {
+        return { id: webRoot, moduleSideEffects: true };
+      }
+    },
+  };
+}
 
 const config: StorybookConfig = {
   stories: [
@@ -10,37 +31,23 @@ const config: StorybookConfig = {
     "@storybook/addon-interactions",
   ],
   framework: {
-    name: "@storybook/react-webpack5",
-    options: {
-      builder: {
-        babelLoaderOptions: {
-          presets: [
-            "@babel/preset-env",
-            ["@babel/preset-react", { runtime: "automatic" }],
-          ],
+    name: "@storybook/react-vite",
+    options: {},
+  },
+  viteFinal: async (config) => {
+    return mergeConfig(config, {
+      plugins: [reactNativeWebAlias()],
+      resolve: {
+        alias: {
+          "react-native$": "react-native-web",
         },
       },
-    },
-  },
-  webpackFinal: async (config, { configType }) => {
-    config.resolve = config.resolve || {};
-    config.resolve.alias = {
-      ...config.resolve.alias,
-      "react-native$": "react-native-web",
-    };
-
-    // react-docgen-loader 제외
-    if (config.module) {
-      config.module.rules = config.module.rules.filter(
-        (rule) => !rule.test?.toString().includes('react-docgen')
-      );
-    }
-
-    config.module?.rules?.push({
-      test: /\.css$/,
-      use: ["style-loader", "css-loader"],
+      optimizeDeps: {
+        exclude: ["react-native"],
+        include: ["react-native-web"],
+      },
     });
-    return config;
   },
 };
+
 export default config;

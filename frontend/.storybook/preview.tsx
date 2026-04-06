@@ -1,5 +1,3 @@
-import { Preview } from "@storybook/react";
-
 const preview = {
   parameters: {
     controls: {
