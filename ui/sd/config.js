@@ -1,24 +1,6 @@
 const path = require("path");
 const StyleDictionary = require("style-dictionary").default;
 
-/** camelCase 변환: ["color","primary","default"] → "colorPrimaryDefault" */
-const toCamelCase = (parts) =>
-  parts
-    .map((p, i) =>
-      i === 0 ? p.toLowerCase() : p.charAt(0).toUpperCase() + p.slice(1),
-    )
-    .join("");
-
-// v4: formatter → format 속성명 변경
-StyleDictionary.registerFormat({
-  name: "javascript/es6Camel",
-  format: function ({ dictionary }) {
-    return dictionary.allTokens
-      .map((t) => `export const ${toCamelCase(t.path)} = "${t.value}";`)
-      .join("\n") + "\n";
-  },
-});
-
 // CommonJS structured format for Tailwind config
 StyleDictionary.registerFormat({
   name: "javascript/cjsStructured",
