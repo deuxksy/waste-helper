@@ -1,0 +1,13 @@
+export const colorPrimaryDefault = "#22c55e";
+export const colorPrimaryDark = "#16a34a";
+export const colorPrimaryDarker = "#166534";
+export const colorEcoBg = "#f0faf0";
+export const colorEcoSurface = "#ffffff";
+export const spacingSm = "4px";
+export const spacingMd = "8px";
+export const spacingLg = "16px";
+export const spacingXl = "24px";
+export const radiusSm = "4px";
+export const radiusMd = "8px";
+export const radiusLg = "12px";
+export const radiusFull = "9999px";
