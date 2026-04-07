@@ -70,7 +70,7 @@ def fetch_page_frames(token: str, file_key: str, page_name: str | None) -> list[
     frames = [
         {"id": node["id"], "name": node["name"]}
         for node in target_page.get("children", [])
-        if node.get("type") == "FRAME"
+        if node.get("type") in ("FRAME", "INSTANCE")
     ]
 
     if not frames:
