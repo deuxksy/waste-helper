@@ -7,7 +7,7 @@ services:
       dockerfile: Dockerfile.adapter
     network_mode: host
     environment:
-      - APERTURE_BASE=${APERTURE_BASE:-http://localhost:8888}
+      - APERTURE_BASE=${APERTURE_BASE:-http://100.118.111.59}
       - APERTURE_API_KEY=${ZAI_API_KEY}
     healthcheck:
       test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8765/v1/models')"]
