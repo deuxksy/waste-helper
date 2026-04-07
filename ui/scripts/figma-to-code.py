@@ -11,6 +11,7 @@ Env:
     OPENUI_MODEL     (선택) glm-5.1
 """
 
+import base64
 import re
 import sys
 
@@ -73,6 +74,58 @@ def fetch_page_frames(token: str, file_key: str, page_name: str | None) -> list[
         print(f"경고: Page '{target_page['name']}'에 FRAME이 없습니다.", file=sys.stderr)
 
     return frames
+
+
+def export_frame_images(token: str, file_key: str, frames: list[dict]) -> list[dict]:
+    """Figma 프레임을 PNG로 export하여 base64 인코딩.
+
+    Args:
+        token: Figma Personal Access Token
+        file_key: Figma 파일 키
+        frames: fetch_page_frames() 반환값
+
+    Returns:
+        [{"id": "...", "name": "...", "image_b64": "..."}]
+
+    Raises:
+        FigmaAPIError: API 호출 실패 시
+    """
+    if not frames:
+        return []
+
+    ids = ",".join(f["id"] for f in frames)
+    url = f"https://api.figma.com/v1/images/{file_key}"
+    headers = {"X-Figma-Token": token}
+    params = {"ids": ids, "format": "png", "scale": "2"}
+
+    resp = requests.get(url, headers=headers, params=params)
+
+    if resp.status_code == 403:
+        raise FigmaAPIError("Figma TOKEN이 만료되었거나 권한이 없습니다.")
+    resp.raise_for_status()
+
+    image_urls = resp.json().get("images", {})
+
+    results = []
+    for frame in frames:
+        image_url = image_urls.get(frame["id"])
+        if not image_url:
+            print(
+                f"경고: 프레임 '{frame['name']}' 이미지 export 실패, 스킵",
+                file=sys.stderr,
+            )
+            continue
+
+        img_resp = requests.get(image_url)
+        img_resp.raise_for_status()
+
+        results.append({
+            "id": frame["id"],
+            "name": frame["name"],
+            "image_b64": base64.b64encode(img_resp.content).decode(),
+        })
+
+    return results
 
 
 def to_pascal_case(name: str) -> str:

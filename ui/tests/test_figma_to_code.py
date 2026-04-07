@@ -91,6 +91,77 @@ class TestFetchPageFrames:
                 fetch_page_frames("t", "bad", "Home")
 
 
+class TestExportFrameImages:
+    """Figma 프레임 PNG export + base64 인코딩"""
+
+    def test_downloads_and_returns_base64(self):
+        from figma_to_code import export_frame_images
+
+        frames = [{"id": "1:2", "name": "home-header"}]
+        png_bytes = b"\x89PNG\r\n\x1a\nfake"
+
+        images_resp = MagicMock(status_code=200)
+        images_resp.json.return_value = {"images": {"1:2": "https://cdn.figma.com/img.png"}}
+
+        img_resp = MagicMock(status_code=200, content=png_bytes)
+        img_resp.raise_for_status = MagicMock()
+
+        def mock_get(url, **kwargs):
+            if "images" in url and "cdn" not in url:
+                return images_resp
+            return img_resp
+
+        with patch("figma_to_code.requests.get", side_effect=mock_get):
+            result = export_frame_images("t", "k", frames)
+
+        assert len(result) == 1
+        assert result[0]["id"] == "1:2"
+        assert result[0]["name"] == "home-header"
+        import base64
+        assert result[0]["image_b64"] == base64.b64encode(png_bytes).decode()
+
+    def test_missing_image_skipped(self):
+        from figma_to_code import export_frame_images
+
+        frames = [
+            {"id": "1:2", "name": "ok"},
+            {"id": "1:3", "name": "missing"},
+        ]
+
+        images_resp = MagicMock(status_code=200)
+        images_resp.json.return_value = {"images": {"1:2": "https://cdn.figma.com/ok.png"}}
+
+        img_resp = MagicMock(status_code=200, content=b"png")
+        img_resp.raise_for_status = MagicMock()
+
+        def mock_get(url, **kwargs):
+            if "images" in url and "cdn" not in url:
+                return images_resp
+            return img_resp
+
+        with patch("figma_to_code.requests.get", side_effect=mock_get), patch("sys.stderr"):
+            result = export_frame_images("t", "k", frames)
+
+        assert len(result) == 1
+        assert result[0]["name"] == "ok"
+
+    def test_empty_frames_returns_empty(self):
+        from figma_to_code import export_frame_images
+
+        with patch("figma_to_code.requests.get"):
+            result = export_frame_images("t", "k", [])
+
+        assert result == []
+
+    def test_api_403_raises(self):
+        from figma_to_code import export_frame_images, FigmaAPIError
+
+        with patch("figma_to_code.requests.get") as mock:
+            mock.return_value = MagicMock(status_code=403)
+            with pytest.raises(FigmaAPIError, match="TOKEN"):
+                export_frame_images("bad", "k", [{"id": "1", "name": "x"}])
+
+
 def test_to_pascal_case_kebab():
     """kebab-case → PascalCase"""
     from figma_to_code import to_pascal_case
