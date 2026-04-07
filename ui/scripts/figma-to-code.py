@@ -226,6 +226,40 @@ def generate_component_code(
     return None
 
 
+def save_component(output_dir: str, frame_name: str, code: str) -> str | None:
+    """생성된 컴포넌트 코드를 파일로 저장.
+
+    Args:
+        output_dir: 출력 디렉터리
+        frame_name: 프레임명 (PascalCase 변환 후 파일명으로 사용)
+        code: JSX 코드
+
+    Returns:
+        저장된 파일 경로, 충돌 시 None
+    """
+    component_name = to_pascal_case(frame_name)
+    filepath = os.path.join(output_dir, f"{component_name}.jsx")
+
+    if os.path.exists(filepath):
+        print(f"경고: '{filepath}' 이미 존재, 스킵", file=sys.stderr)
+        return None
+
+    os.makedirs(output_dir, exist_ok=True)
+    with open(filepath, "w", encoding="utf-8") as f:
+        f.write(code)
+
+    return filepath
+
+
+def save_raw_response(output_dir: str, frame_name: str, raw_text: str) -> str:
+    """파싱 실패 시 원본 응답을 .raw.txt로 저장."""
+    os.makedirs(output_dir, exist_ok=True)
+    filepath = os.path.join(output_dir, f"{to_pascal_case(frame_name)}.raw.txt")
+    with open(filepath, "w", encoding="utf-8") as f:
+        f.write(raw_text)
+    return filepath
+
+
 def to_pascal_case(name: str) -> str:
     """프레임명을 PascalCase로 변환.
 

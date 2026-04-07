@@ -233,6 +233,59 @@ class TestGenerateComponentCode:
         assert "export default function App()" in result
 
 
+class TestSaveComponent:
+    """컴포넌트 파일 저장"""
+
+    def test_saves_jsx_file(self, tmp_path):
+        from figma_to_code import save_component
+
+        result = save_component(str(tmp_path), "home-header", "<div>Hello</div>")
+
+        expected = str(tmp_path / "HomeHeader.jsx")
+        assert result == expected
+        assert (tmp_path / "HomeHeader.jsx").read_text() == "<div>Hello</div>"
+
+    def test_creates_output_dir(self, tmp_path):
+        from figma_to_code import save_component
+
+        output = str(tmp_path / "generated")
+        save_component(output, "waste-card", "<View />")
+
+        assert (tmp_path / "generated" / "WasteCard.jsx").exists()
+
+    def test_skips_existing_file(self, tmp_path):
+        from figma_to_code import save_component
+
+        (tmp_path / "HomeHeader.jsx").write_text("old")
+
+        with patch("sys.stderr"):
+            result = save_component(str(tmp_path), "home-header", "new")
+
+        assert result is None
+        assert (tmp_path / "HomeHeader.jsx").read_text() == "old"
+
+
+class TestSaveRawResponse:
+    """원본 응답 저장"""
+
+    def test_saves_raw_txt(self, tmp_path):
+        from figma_to_code import save_raw_response
+
+        result = save_raw_response(str(tmp_path), "home-header", "raw output")
+
+        expected = str(tmp_path / "HomeHeader.raw.txt")
+        assert result == expected
+        assert (tmp_path / "HomeHeader.raw.txt").read_text() == "raw output"
+
+    def test_creates_dir_if_missing(self, tmp_path):
+        from figma_to_code import save_raw_response
+
+        output = str(tmp_path / "generated")
+        save_raw_response(output, "card", "data")
+
+        assert (tmp_path / "generated" / "Card.raw.txt").exists()
+
+
 def test_to_pascal_case_kebab():
     from figma_to_code import to_pascal_case
     assert to_pascal_case("home-header") == "HomeHeader"
