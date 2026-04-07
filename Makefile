@@ -199,11 +199,15 @@ docker-push-vlm: build-vlm ## VLM Service 이미지 빌드 + Push
 
 .PHONY: token-sync token-build storybook storybook-build \
         appsmith-up appsmith-down openui-up openui-down \
-        ui-pipeline
+        ui-pipeline figma-to-code
 
 token-sync: ## Figma Variables API → ui/tokens/tokens.json 동기화
 	@echo "Figma 토큰 동기화..."
 	cd ui/scripts && ./figma-sync.sh
+
+figma-to-code: ## Figma Page → React/NativeWind 컴포넌트 자동 생성
+	$(call check_env,FIGMA_TOKEN)
+	python3 ui/scripts/figma-to-code.py --page "$(PAGE)"
 
 token-build: ## Style Dictionary → Tailwind tokens + Appsmith CSS
 	@echo "Style Dictionary 빌드..."
