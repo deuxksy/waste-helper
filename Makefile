@@ -220,18 +220,18 @@ storybook-build: ## Storybook 정적 빌드
 	cd frontend && pnpm storybook-build
 
 appsmith-up: ## Appsmith 컨테이너 시작 (port 8080)
-	docker compose up -d appsmith
+	docker compose -f ui/compose.yaml up -d appsmith
 	@echo "✓ Appsmith: http://localhost:8080"
 
 appsmith-down: ## Appsmith 컨테이너 중지
-	docker compose stop appsmith
+	docker compose -f ui/compose.yaml stop appsmith
 
 openui-up: ## OpenUI + adapter 시작 (port 7878)
-	docker compose up -d openui
+	docker compose -f ui/compose.yaml up -d openui
 	@echo "✓ OpenUI: http://localhost:7878"
 
 openui-down: ## OpenUI + adapter 중지
-	docker compose stop openui
+	docker compose -f ui/compose.yaml stop openui
 
 ui-pipeline: token-sync token-build ## 전체 UI 파이프라인 (sync → build)
 	@echo "✓ UI 파이프라인 완료. 'make storybook'으로 검증 시작"
