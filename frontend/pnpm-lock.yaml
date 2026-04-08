@@ -86,7 +86,7 @@ importers:
         version: 8.6.14(storybook@8.6.18)
       '@storybook/react-vite':
         specifier: ^8.6.14
-        version: 8.6.18(react-dom@19.1.0(react@19.2.4))(react@19.2.4)(storybook@8.6.18)(typescript@5.9.3)(vite@8.0.5(@emnapi/core@1.9.2)(@emnapi/runtime@1.9.2)(@types/node@25.5.0)(esbuild@0.25.12)(jiti@1.21.7)(terser@5.46.1)(yaml@2.8.3))
+        version: 8.6.18(react-dom@19.1.0(react@19.2.4))(react@19.2.4)(storybook@8.6.18)(typescript@6.0.2)(vite@8.0.5(@emnapi/core@1.9.2)(@emnapi/runtime@1.9.2)(@types/node@25.5.0)(esbuild@0.25.12)(jiti@1.21.7)(terser@5.46.1)(yaml@2.8.3))
       '@types/react':
         specifier: ~19.2.14
         version: 19.2.14
@@ -97,8 +97,8 @@ importers:
         specifier: ^8.6.14
         version: 8.6.18
       typescript:
-        specifier: ~5.9.2
-        version: 5.9.3
+        specifier: ~6.0.2
+        version: 6.0.2
 
 packages:
 
@@ -4193,8 +4193,8 @@ packages:
     resolution: {integrity: sha512-Ne2YiiGN8bmrmJJEuTWTLJR32nh/JdL1+PSicowtNb0WFpn59GK8/lfD61bVtzguz7b3PBt74nxpv/Pw5po5Rg==}
     engines: {node: '>=8'}
 
-  typescript@5.9.3:
-    resolution: {integrity: sha512-jl1vZzPDinLr9eUt3J/t7V6FgNEw9QjvBPdysz9KfQDD41fQrC2Y4vKQdiaUpFT4bXlb1RHhLpp8wtm6M5TgSw==}
+  typescript@6.0.2:
+    resolution: {integrity: sha512-bGdAIrZ0wiGDo5l8c++HWtbaNCWTS4UTv7RaTH/ThVIgjkveJt83m74bBHMJkuCbslY8ixgLBVZJIOiQlQTjfQ==}
     engines: {node: '>=14.17'}
     hasBin: true
 
@@ -5642,14 +5642,14 @@ snapshots:
       '@types/yargs': 17.0.35
       chalk: 4.1.2
 
-  '@joshwooding/vite-plugin-react-docgen-typescript@0.5.0(typescript@5.9.3)(vite@8.0.5(@emnapi/core@1.9.2)(@emnapi/runtime@1.9.2)(@types/node@25.5.0)(esbuild@0.25.12)(jiti@1.21.7)(terser@5.46.1)(yaml@2.8.3))':
+  '@joshwooding/vite-plugin-react-docgen-typescript@0.5.0(typescript@6.0.2)(vite@8.0.5(@emnapi/core@1.9.2)(@emnapi/runtime@1.9.2)(@types/node@25.5.0)(esbuild@0.25.12)(jiti@1.21.7)(terser@5.46.1)(yaml@2.8.3))':
     dependencies:
       glob: 10.5.0
       magic-string: 0.27.0
-      react-docgen-typescript: 2.4.0(typescript@5.9.3)
+      react-docgen-typescript: 2.4.0(typescript@6.0.2)
       vite: 8.0.5(@emnapi/core@1.9.2)(@emnapi/runtime@1.9.2)(@types/node@25.5.0)(esbuild@0.25.12)(jiti@1.21.7)(terser@5.46.1)(yaml@2.8.3)
     optionalDependencies:
-      typescript: 5.9.3
+      typescript: 6.0.2
 
   '@jridgewell/gen-mapping@0.3.13':
     dependencies:
@@ -6321,12 +6321,12 @@ snapshots:
       react-dom: 19.1.0(react@19.2.4)
       storybook: 8.6.18
 
-  '@storybook/react-vite@8.6.18(react-dom@19.1.0(react@19.2.4))(react@19.2.4)(storybook@8.6.18)(typescript@5.9.3)(vite@8.0.5(@emnapi/core@1.9.2)(@emnapi/runtime@1.9.2)(@types/node@25.5.0)(esbuild@0.25.12)(jiti@1.21.7)(terser@5.46.1)(yaml@2.8.3))':
+  '@storybook/react-vite@8.6.18(react-dom@19.1.0(react@19.2.4))(react@19.2.4)(storybook@8.6.18)(typescript@6.0.2)(vite@8.0.5(@emnapi/core@1.9.2)(@emnapi/runtime@1.9.2)(@types/node@25.5.0)(esbuild@0.25.12)(jiti@1.21.7)(terser@5.46.1)(yaml@2.8.3))':
     dependencies:
-      '@joshwooding/vite-plugin-react-docgen-typescript': 0.5.0(typescript@5.9.3)(vite@8.0.5(@emnapi/core@1.9.2)(@emnapi/runtime@1.9.2)(@types/node@25.5.0)(esbuild@0.25.12)(jiti@1.21.7)(terser@5.46.1)(yaml@2.8.3))
+      '@joshwooding/vite-plugin-react-docgen-typescript': 0.5.0(typescript@6.0.2)(vite@8.0.5(@emnapi/core@1.9.2)(@emnapi/runtime@1.9.2)(@types/node@25.5.0)(esbuild@0.25.12)(jiti@1.21.7)(terser@5.46.1)(yaml@2.8.3))
       '@rollup/pluginutils': 5.3.0
       '@storybook/builder-vite': 8.6.18(storybook@8.6.18)(vite@8.0.5(@emnapi/core@1.9.2)(@emnapi/runtime@1.9.2)(@types/node@25.5.0)(esbuild@0.25.12)(jiti@1.21.7)(terser@5.46.1)(yaml@2.8.3))
-      '@storybook/react': 8.6.18(react-dom@19.1.0(react@19.2.4))(react@19.2.4)(storybook@8.6.18)(typescript@5.9.3)
+      '@storybook/react': 8.6.18(react-dom@19.1.0(react@19.2.4))(react@19.2.4)(storybook@8.6.18)(typescript@6.0.2)
       find-up: 5.0.0
       magic-string: 0.30.21
       react: 19.2.4
@@ -6341,7 +6341,7 @@ snapshots:
       - supports-color
       - typescript
 
-  '@storybook/react@8.6.18(react-dom@19.1.0(react@19.2.4))(react@19.2.4)(storybook@8.6.18)(typescript@5.9.3)':
+  '@storybook/react@8.6.18(react-dom@19.1.0(react@19.2.4))(react@19.2.4)(storybook@8.6.18)(typescript@6.0.2)':
     dependencies:
       '@storybook/components': 8.6.18(storybook@8.6.18)
       '@storybook/global': 5.0.0
@@ -6353,7 +6353,7 @@ snapshots:
       react-dom: 19.1.0(react@19.2.4)
       storybook: 8.6.18
     optionalDependencies:
-      typescript: 5.9.3
+      typescript: 6.0.2
 
   '@storybook/test@8.6.14(storybook@8.6.18)':
     dependencies:
@@ -8589,9 +8589,9 @@ snapshots:
       - bufferutil
       - utf-8-validate
 
-  react-docgen-typescript@2.4.0(typescript@5.9.3):
+  react-docgen-typescript@2.4.0(typescript@6.0.2):
     dependencies:
-      typescript: 5.9.3
+      typescript: 6.0.2
 
   react-docgen@7.1.1:
     dependencies:
@@ -9209,7 +9209,7 @@ snapshots:
 
   type-fest@0.7.1: {}
 
-  typescript@5.9.3: {}
+  typescript@6.0.2: {}
 
   ua-parser-js@1.0.41: {}
 
