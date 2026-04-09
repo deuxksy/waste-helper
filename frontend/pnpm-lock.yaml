@@ -27,8 +27,8 @@ importers:
         specifier: ~14.0.11
         version: 14.0.11(expo@54.0.33)(react-native@0.81.5(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.2.4))(react@19.2.4)
       expo-image-manipulator:
-        specifier: ^14.0.8
-        version: 14.0.8(expo@54.0.33)
+        specifier: ^55.0.14
+        version: 55.0.14(expo@54.0.33)
       expo-image-picker:
         specifier: ^17.0.10
         version: 17.0.10(expo@54.0.33)
@@ -40,7 +40,7 @@ importers:
         version: 6.0.23(@expo/metro-runtime@6.1.2)(@types/react@19.2.14)(expo-constants@18.0.13)(expo-linking@8.0.11)(expo@54.0.33)(react-dom@19.1.0(react@19.2.4))(react-native-reanimated@4.1.7(react-native-worklets@0.5.1(@babel/core@7.29.0)(react-native@0.81.5(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.2.4))(react@19.2.4))(react-native@0.81.5(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.2.4))(react@19.2.4))(react-native-safe-area-context@5.7.0(react-native@0.81.5(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.2.4))(react@19.2.4))(react-native-screens@4.16.0(react-native@0.81.5(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.2.4))(react@19.2.4))(react-native-web@0.21.2(react-dom@19.1.0(react@19.2.4))(react@19.2.4))(react-native@0.81.5(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.2.4))(react@19.2.4)
       expo-splash-screen:
         specifier: ~55.0.16
-        version: 55.0.16(expo@54.0.33)(typescript@5.9.3)
+        version: 55.0.16(expo@54.0.33)(typescript@6.0.2)
       expo-status-bar:
         specifier: ~3.0.9
         version: 3.0.9(react-native@0.81.5(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.2.4))(react@19.2.4)
@@ -2414,13 +2414,18 @@ packages:
       react: '*'
       react-native: '*'
 
+  expo-image-loader@55.0.0:
+    resolution: {integrity: sha512-NOjp56wDrfuA5aiNAybBIjqIn1IxKeGJ8CECWZncQ/GzjZfyTYAHTCyeApYkdKkMBLHINzI4BbTGSlbCa0fXXQ==}
+    peerDependencies:
+      expo: '*'
+
   expo-image-loader@6.0.0:
     resolution: {integrity: sha512-nKs/xnOGw6ACb4g26xceBD57FKLFkSwEUTDXEDF3Gtcu3MqF3ZIYd3YM+sSb1/z9AKV1dYT7rMSGVNgsveXLIQ==}
     peerDependencies:
       expo: '*'
 
-  expo-image-manipulator@14.0.8:
-    resolution: {integrity: sha512-sXsXjm7rIxLWZe0j2A41J/Ph53PpFJRdyzJ3EQ/qetxLUvS2m3K1sP5xy37px43qCf0l79N/i6XgFgenFV36/Q==}
+  expo-image-manipulator@55.0.14:
+    resolution: {integrity: sha512-j46l8ok7lWrDvgYaIJTjrSg7zBuDrGIbR7TFI6VnI/IfFUi/CGqMfw1Ks+2wzXB1Vcs+LLH8OLv+WR1y+/zVKg==}
     peerDependencies:
       expo: '*'
 
@@ -5332,12 +5337,12 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@expo/config@55.0.13(typescript@5.9.3)':
+  '@expo/config@55.0.13(typescript@6.0.2)':
     dependencies:
       '@expo/config-plugins': 55.0.8
       '@expo/config-types': 55.0.5
       '@expo/json-file': 10.0.13
-      '@expo/require-utils': 55.0.3(typescript@5.9.3)
+      '@expo/require-utils': 55.0.3(typescript@6.0.2)
       deepmerge: 4.3.1
       getenv: 2.0.0
       glob: 13.0.6
@@ -5513,9 +5518,9 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@expo/prebuild-config@55.0.13(expo@54.0.33)(typescript@5.9.3)':
+  '@expo/prebuild-config@55.0.13(expo@54.0.33)(typescript@6.0.2)':
     dependencies:
-      '@expo/config': 55.0.13(typescript@5.9.3)
+      '@expo/config': 55.0.13(typescript@6.0.2)
       '@expo/config-plugins': 55.0.8
       '@expo/config-types': 55.0.5
       '@expo/image-utils': 0.8.12
@@ -5530,13 +5535,13 @@ snapshots:
       - supports-color
       - typescript
 
-  '@expo/require-utils@55.0.3(typescript@5.9.3)':
+  '@expo/require-utils@55.0.3(typescript@6.0.2)':
     dependencies:
       '@babel/code-frame': 7.29.0
       '@babel/core': 7.29.0
       '@babel/plugin-transform-modules-commonjs': 7.28.6(@babel/core@7.29.0)
     optionalDependencies:
-      typescript: 5.9.3
+      typescript: 6.0.2
     transitivePeerDependencies:
       - supports-color
 
@@ -7180,14 +7185,18 @@ snapshots:
       react: 19.2.4
       react-native: 0.81.5(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.2.4)
 
+  expo-image-loader@55.0.0(expo@54.0.33):
+    dependencies:
+      expo: 54.0.33(@babel/core@7.29.0)(@expo/metro-runtime@6.1.2)(expo-router@6.0.23)(react-native@0.81.5(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.2.4))(react@19.2.4)
+
   expo-image-loader@6.0.0(expo@54.0.33):
     dependencies:
       expo: 54.0.33(@babel/core@7.29.0)(@expo/metro-runtime@6.1.2)(expo-router@6.0.23)(react-native@0.81.5(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.2.4))(react@19.2.4)
 
-  expo-image-manipulator@14.0.8(expo@54.0.33):
+  expo-image-manipulator@55.0.14(expo@54.0.33):
     dependencies:
       expo: 54.0.33(@babel/core@7.29.0)(@expo/metro-runtime@6.1.2)(expo-router@6.0.23)(react-native@0.81.5(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.2.4))(react@19.2.4)
-      expo-image-loader: 6.0.0(expo@54.0.33)
+      expo-image-loader: 55.0.0(expo@54.0.33)
 
   expo-image-picker@17.0.10(expo@54.0.33):
     dependencies:
@@ -7267,9 +7276,9 @@ snapshots:
 
   expo-server@1.0.5: {}
 
-  expo-splash-screen@55.0.16(expo@54.0.33)(typescript@5.9.3):
+  expo-splash-screen@55.0.16(expo@54.0.33)(typescript@6.0.2):
     dependencies:
-      '@expo/prebuild-config': 55.0.13(expo@54.0.33)(typescript@5.9.3)
+      '@expo/prebuild-config': 55.0.13(expo@54.0.33)(typescript@6.0.2)
       expo: 54.0.33(@babel/core@7.29.0)(@expo/metro-runtime@6.1.2)(expo-router@6.0.23)(react-native@0.81.5(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.2.4))(react@19.2.4)
     transitivePeerDependencies:
       - supports-color
